@@ -29,5 +29,5 @@ createServer({key, cert}, requestListener)
 
 ### features
 - [x] trivial command line interface
-- [x] manages either http and https upstreams
-- [x] follows redirects
+- [x] supports both http and https upstreams
+- [x] follows loction redirects
