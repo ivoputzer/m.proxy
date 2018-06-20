@@ -17,12 +17,7 @@ const {createServer} = require('https')
 const {requestListenerFor} = require('m.proxy')
 
 const requestListener = requestListenerFor(upstream, {rejectUnauthorized: true})
-const options = {
-  key: fs.readFileSync(path/to/key.pem'),
-  cert: fs.readFileSync('path/to/cert.cert')
-}
-
-createServer(options, requestListener)
+createServer({key, cert}, requestListener)
   .listen(443)
 ```
 
