@@ -1,0 +1,32 @@
+language: node_js
+install: npm install --no-optional
+git:
+  depth: 1
+node_js:
+- 10
+- 9
+- 8
+- 7
+- 6
+- 5
+- 4
+jobs:
+  include:
+  - stage: coverage
+    install: npm install istanbul coveralls
+    script: npm run coverage
+    after_success: cat coverage/lcov.info | node_modules/coveralls/bin/coveralls.js
+  - stage: deploy
+    install: skip
+    script: skip
+    deploy:
+      provider: npm
+      email: ivo.putzer@gmail.com
+      api_key:
+        secure: XAhQe/L3ZA0Jo5xczKQNZp034sHwgdpGB8gKY9kOk5PlM8AosL4X3pENNoUQD9BpZRPL6Fy34thbesOkJzMg4Cbv8upgumLLsU8CPTxAgcoEensukWfTr9mr5D/Wxe//WBtUq2Jkv8nIdUqVt4EI+LCpDkQy3sGfON5PrQXFY6UA0btGJ4LxFOTuW2WFXNz5V6lYqbq59h2ijyaL1LXf5hGnB8LyL4XRjKWt6Jj3uNZMBqnc4f5Pim7UZlKRxk54gYZq5/Q5XEScMbpPbJqOyPqOvFiSOEavVvHKQ0zIT518BdO2jf9JiZsyuoUnLCK1MFRvZUG4iPjPtI7Uwc+Hs3LIGGdYPW04XBU75qiTJR4dSnEnqWkdiyRavWp7nj/mJDnpfLXvkS8bg9AuRRl6lCoe8GiQn+MDYQq8iAuu/biIUZ5Kuog63yl85vWAi6Hy3tEwR5tWAeHlI7wjSFjO2iunhUAwqSQntIdAY4Z3MLvOLsrGJDY6GhYITZIt3L5IHsjyUu0qI5t4HBYTtCVP4X37MvkRAISK5emT+41XxoJ8OPFumlssxgrhACl+Tfhc3QXJififEgLw4vWBatnrMLIB2pVwApKqGYzH5W9UY24YDAZhnduhKs7LNI4VrjGMh+x3fR2XQc1aZRe5mFr8vy38iPwxySnsTq60B7Kh9cI=
+      on:
+        repo: ivoputzer/m.proxy
+  allow_failures:
+  - node_js: 5
+  - node_js: 4
+
