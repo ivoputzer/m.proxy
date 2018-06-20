@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const {createServer} = require('..')
+const {parse} = require('url')
+
+;(function startServer (proxy, upstream, retry) {
+  const {hostname, port} = parse(proxy)
+  console.log('---', hostname, port)
+  createServer(upstream)
+    .listen(port, function () {
+      console.info(`[INFO] listening on `, this.address())
+    })
+    .on('error', function (err) {
+      if (!/eaddrinuse/i.test(err.errno)) {
+        console.error('[ERR]', err)
+        process.exit(1)
+      }
+      const wait = 100 * Math.random() + 1000 * Math.pow(2, retry)
+      console.error('[WARN] Address %d in use, retrying... (wait %ds)', port, wait.toFixed(2))
+      setTimeout(startServer, wait, proxy, upstream, ++retry)
+    })
+})(...process.argv.slice(2), 0)

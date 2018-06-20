@@ -1,21 +1,23 @@
-const {request} = require('http')
+const {createServer} = require('http')
 const {parse} = require('url')
 
-exports.requestListenerFor = ({env, argv}) => {
-  return (req, res) => {
-    const url = parse(req.url)
-    console.log(url)
-    request(url, $ => $.pipe(res))
-  }
+exports.createServer = (upstream, {requestListenerFor} = exports) => {
+  return createServer(requestListenerFor(upstream))
 }
 
-// server.listen(handle[, backlog][, callback])
-// server.listen(options[, callback])
-// server.listen(path[, backlog][, callback]) for IPC servers
-// server.listen([port[, host[, backlog]]][, callback]) for TCP servers
-
-exports.urlFor = ({argv: [,, options]}) => {
-  const url = parse(options)
-
-  return 8080
+exports.requestListenerFor = (upstream, {rejectUnauthorized = false} = {}) => {
+  return function requestListener (req, res, {protocol, hostname, port} = parse(upstream)) {
+    const {request} = require(protocol.slice(0, -1))
+    delete req.headers.host // otherwise wrong port is assigned in case of redirect
+    req.pipe(
+      request({path: req.url, headers: req.headers, hostname, port, rejectUnauthorized}, data => {
+        if (data.headers.location) {
+          requestListener(req, res, parse(data.headers.location))
+          return
+        }
+        res.writeHead(data.statusCode, data.headers)
+        data.pipe(res)
+      })
+    )
+  }
 }
