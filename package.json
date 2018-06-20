@@ -1,0 +1,33 @@
+{
+  "name": "m.proxy",
+  "version": "1.0.0",
+  "description": "m(icro)proxy is a lightweight es6 powered http proxy",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "standard",
+    "test": "m.test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivoputzer/m.proxy.git"
+  },
+  "keywords": [
+    "proxy",
+    "http",
+    "https",
+    "m.icro"
+  ],
+  "author": "Ivo von Putzer Reibegg <ivo.putzer@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ivoputzer/m.proxy/issues"
+  },
+  "homepage": "https://github.com/ivoputzer/m.proxy#readme",
+  "optionalDependencies": {
+    "istanbul": "^0.4.5"
+  },
+  "devDependencies": {
+    "m.test": "0.0.57",
+    "standard": "^11.0.1"
+  }
+}
